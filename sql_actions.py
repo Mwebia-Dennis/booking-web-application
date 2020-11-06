@@ -1,15 +1,12 @@
 """import mysql.connector // import your mysql connector"""
-import tables.py
 import connection.py
 
-class SqlActions(object):
+class SqlActions():
 	"""docstring for SqlActions
 		*used to set all data to database 
 		*will be inherited 
 	"""
 
-
-	tablesNames = TableNames()
 	def __init__(self):
 		self.myCursor = conn.cursor()
 		self.conn = conn
@@ -28,14 +25,16 @@ class SqlActions(object):
 
 	#define function for getting data
 
-	def getDataToDB(table, column_list, where_clause, limit = ''):
+	def getDataFromDB(table, column_list, where_clause, limit = ''):
 
 		col_info = getColNameAndValue(column_list)
 
 		sql = "SELECT "+col_info[0]+" FROM "+table
 
-		if where_clause != '':
-			sql += " WHERE "+where_clause['column_name']+" = "+where_clause['data']
+		if where_clause:
+
+			sql += " WHERE "+where_clause[0]['column_name']+" = "+where_clause[0]['data']
+				
 
 		if limit != '':
 
@@ -65,7 +64,7 @@ class SqlActions(object):
 		for column in column_list:
 			sql += column + " = "+"%s"
 
-		sql += " WHERE "+where_clause['column_name']+" = "+where_clause['data']
+		sql += " WHERE "+where_clause[0]['column_name']+" = "+where_clause[0]['data']
 
 
 
@@ -76,9 +75,9 @@ class SqlActions(object):
 	#define deleting data
 	# delete and return true if any rows were deleted
 
-	def deleteData():
+	def deleteData(table, where_clause):
 
-		sql = "DELETE FROM "+table+" WHERE `"+where_clause['column_name']+" = "+where_clause['data']
+		sql = "DELETE FROM "+table+" WHERE `"+where_clause[0]['column_name']+" = "+where_clause[0]['data']
 
 		myCursor.execute(sql)
 		result = conn.commit()
